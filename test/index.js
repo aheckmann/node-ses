@@ -26,6 +26,9 @@ describe('node-ses', function(){
     assert.equal('function', typeof ses.createClient);
     assert.equal('function', typeof ses.Email);
   });
+  it('should have a version', function(){
+    assert(ses.version);
+  })
 })
 
 describe('createClient', function(){
