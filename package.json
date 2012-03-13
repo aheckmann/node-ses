@@ -1,7 +1,7 @@
 {
   "author": "Aaron Heckmann <aaron.heckmann+github@gmail.com>",
-  "description": "Amazon SES (sendmail) for node"
-  "keywords": ["amazon", "ses", "email", "sendmail", "amazon-ses"]
+  "description": "Amazon SES (sendmail) for node",
+  "keywords": ["amazon", "ses", "email", "sendmail", "amazon-ses"],
   "name": "node-ses",
   "version": "0.0.1",
   "repository": {
