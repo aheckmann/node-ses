@@ -5,7 +5,7 @@
   "name": "node-ses",
   "version": "0.0.1",
   "repository": {
-    "url": ""
+    "url": "git://github.com/aheckmann/node-ses.git"
   },
   "scripts": {
     "test": "make test"
