@@ -1,0 +1,21 @@
+{
+  "author": "Aaron Heckmann <aaron.heckmann+github@gmail.com>",
+  "name": "node-ses",
+  "version": "0.0.0",
+  "repository": {
+    "url": ""
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "dependencies": {
+    "debug": "0.5.0"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
