@@ -3,7 +3,7 @@
   "description": "Amazon SES (sendmail) for node",
   "keywords": ["amazon", "ses", "email", "sendmail", "amazon-ses"],
   "name": "node-ses",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "url": "git://github.com/aheckmann/node-ses.git"
   },
