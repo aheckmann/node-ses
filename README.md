@@ -38,8 +38,8 @@ You'll probably only be using this method. It takes an options object with the f
     `amazon` - [optional] the amazon end-point uri. defaults to amazon east.
 
 ```js
-    var ses = require('node-ses')
-      , client = ses.createClient({ key: 'key', secret: 'secret' });
+var ses = require('node-ses')
+  , client = ses.createClient({ key: 'key', secret: 'secret' });
 ```
 
 The client created has one method, `sendemail`. This method receives an options object with the following properties:
