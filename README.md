@@ -62,4 +62,10 @@ Optional properties (overrides the values set in `createClient`):
 
 The `sendmail` method transports your message to the AWS SES service. Check for errors returned since a 400 status is not uncommon.
 
-[LICENCE](https://github.com/aheckmann/node-ses/blob/master/LICENSE)
+## tests
+
+`make test`
+
+## Licence
+
+[MIT](https://github.com/aheckmann/node-ses/blob/master/LICENSE)
