@@ -3,26 +3,28 @@
 
 An Amazon SES api for nodejs with proper error handling.
 
-This module implements the SendEmail action only. What more do you need? ;)
-
-usage:
+_This module implements the SendEmail action only. What more do you need? ;)_
 
 ```js
-    var ses = require('node-ses')
-      , client = ses.createClient({ key: 'key', secret: 'secret' });
+var ses = require('node-ses')
+  , client = ses.createClient({ key: 'key', secret: 'secret' });
 
-    client.sendEmail({
-       to: 'aaron.heckmann+github@gmail.com'
-     , from: 'somewhereOverTheR@inbow.com'
-     , cc: 'theWickedWitch@nerds.net'
-     , bcc: ['canAlsoBe@nArray.com', 'forrealz@.org']
-     , subject: 'greetings'
-     , message: 'your <b>message</b> goes here'
-     , altText: 'plain text'
-   }, function (err, data, res) {
-     // ...
-   });
+client.sendEmail({
+   to: 'aaron.heckmann+github@gmail.com'
+ , from: 'somewhereOverTheR@inbow.com'
+ , cc: 'theWickedWitch@nerds.net'
+ , bcc: ['canAlsoBe@nArray.com', 'forrealz@.org']
+ , subject: 'greetings'
+ , message: 'your <b>message</b> goes here'
+ , altText: 'plain text'
+}, function (err, data, res) {
+ // ...
+});
 ```
+
+## install
+
+`npm install node-ses`
 
 The module has one primary export:
 
