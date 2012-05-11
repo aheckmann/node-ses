@@ -9,7 +9,7 @@ _This module implements the SendEmail action only. What more do you need? ;)_
 var ses = require('node-ses')
   , client = ses.createClient({ key: 'key', secret: 'secret' });
 
-client.sendEmail({
+client.sendemail({
    to: 'aaron.heckmann+github@gmail.com'
  , from: 'somewhereOverTheR@inbow.com'
  , cc: 'theWickedWitch@nerds.net'
