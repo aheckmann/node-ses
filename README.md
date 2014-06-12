@@ -42,6 +42,8 @@ var ses = require('node-ses')
   , client = ses.createClient({ key: 'key', secret: 'secret' });
 ```
 
+## client.sendemail(options, function (err, data, res))
+
 The client created has one method, `sendemail`. This method receives an options object with the following properties:
 
     `from` - email address from which to send
@@ -60,7 +62,15 @@ Optional properties (overrides the values set in `createClient`):
     `algorithm` - AWS algorithm to use
     `amazon` - AWS end point
 
-The `sendmail` method transports your message to the AWS SES service. Check for errors returned since a 400 status is not uncommon.
+The `sendmail` method transports your message to the AWS SES service. If Amazon
+returns an HTTP status code that's less than `200` or greater than or equal to
+400, we will callback with an `err` message.  Check for errors returned since a
+400 status is not uncommon.
+
+The `data` returned in the callback is the HTTP body returned by Amazon as XML.
+See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
+
+The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
 
 ## tests
 
