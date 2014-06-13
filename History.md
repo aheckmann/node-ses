@@ -1,4 +1,9 @@
 
+NEXT / DATE
+==================
+
+  * docs were updated to clarify what the `data` and `res` return values are [markstos](https://github.com/markstos) (#6)
+
 0.0.3 / 2012-08-20
 ==================
 
