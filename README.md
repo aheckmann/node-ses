@@ -64,8 +64,8 @@ Optional properties (overrides the values set in `createClient`):
 
 The `sendmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
-400, we will callback with an `err` message.  Check for errors returned since a
-400 status is not uncommon.
+400, we will callback with an `err` object that is a direct translation of the XML error Amazon provides.
+Check for errors returned since a 400 status is not uncommon.
 
 The `data` returned in the callback is the HTTP body returned by Amazon as XML.
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
