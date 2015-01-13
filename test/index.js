@@ -256,9 +256,20 @@ describe('Email', function(){
     it('should pass', function(){
       assert.equal(undefined, email.validate());
     })
-    it('should fail with To is required', function(){
+    it('should fail with To, Cc or Bcc is required', function(){
       email.to = [];
-      assert.equal("To is required", email.validate());
+      email.cc = [];
+      email.bcc = [];
+      assert.equal("To, Cc or Bcc is required", email.validate());
+
+      email.cc = ['works'];
+      assert.equal(undefined, email.validate());
+      email.cc = [];
+
+      email.bcc = ['works'];
+      assert.equal(undefined, email.validate());
+      email.bcc = [];
+
       email.to = ['works'];
       assert.equal(undefined, email.validate());
     })
