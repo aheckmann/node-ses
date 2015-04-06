@@ -72,9 +72,13 @@ See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/
 
 The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
 
-## tests
+## Tests
 
 `make test`
+
+## See Also
+
+ * [nodemailer](https://www.npmjs.com/package/nodemailer) has more features, including attachment support. There are many "transport" plugins available for it, including one for SES.
 
 ## Licence
 
