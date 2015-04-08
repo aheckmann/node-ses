@@ -328,10 +328,16 @@ describe('Email', function(){
       assert.equal('function', typeof email.send);
     })
     it('should callback an error', function(done){
+      this.timeout(3000);
+      var calledTimes = 0;
       email.send(function (err) {
+        calledTimes++;
+        assert.equal(calledTimes,1,"callback was called only once");
         assert(err);
-        assert(/^node-ses failed with status: 403 and data:/.test(err.message));
-        done();
+        assert(err.Message);
+        assert(/^The security token included in the request is invalid/.test(err.Message));
+        // Wait to see if the code is accidentally going to run the test before declaring done.
+        setTimeout(done,1000);
       });
     })
 
