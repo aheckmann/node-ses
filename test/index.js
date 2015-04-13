@@ -330,7 +330,8 @@ describe('Email', function(){
     it('should callback an error', function(done){
       email.send(function (err) {
         assert(err);
-        assert(/^node-ses failed with status: 403 and data:/.test(err.message));
+        assert(err.Message);
+        assert(/^The security token included in the request is invalid/.test(err.Message));
         done();
       });
     })
