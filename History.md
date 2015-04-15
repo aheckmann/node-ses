@@ -1,3 +1,11 @@
+1.0.1 / 2015-04-15
+==================
+
+[INTERNALS]
+
+  * xml2json dependency with replaced with smaller xml2js dependency. [cromestant](https://github.com/cromestant) and  [markstos](https://github.com/markstos) (#15)
+  * Bump dependencies
+
 1.0.0 / 2014-11-06
 ==================
 
@@ -5,6 +13,7 @@
 
   * The format of SES errors has changed from XML to JavaScript objects. This should fit in more naturally
     with Node.js code, but is not backward compatible if you happened to be parsing the errors before.  [robludwig](https://github.com/robludwig)
+
 [DOCUMENTATION]
 
   * docs were updated to clarify what the `data` and `res` return values are [markstos](https://github.com/markstos) (#6)
