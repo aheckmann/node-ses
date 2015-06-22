@@ -1,6 +1,10 @@
 1.0.1 / 2015-04-15
 ==================
 
+[DOCUMENTATION]
+
+ * Explicitly document format for SES endpoints and clarify that not all AWS regions support SES. (#13, rickwaugh1)
+
 [INTERNALS]
 
   * xml2json dependency with replaced with smaller xml2js dependency. [cromestant](https://github.com/cromestant) and  [markstos](https://github.com/markstos) (#15)
