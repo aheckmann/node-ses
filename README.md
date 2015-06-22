@@ -49,14 +49,16 @@ var ses = require('node-ses')
 
 The client created has one method, `sendemail`. This method receives an options object with the following properties:
 
-    `from` - email address from which to send
-    `subject` - string
-    `message` - can be html
-    `altText` - plain text version of message
+    `from` - email address from which to send (required)
+    `subject` - string (required). Must be encoded as UTF-8
+    `message` - can be html (required). Must be encoded as UTF-8.
+    `altText` - plain text version of message. Must be encoded as UTF-8.
     `to` - email address or array of addresses
     `cc` - email address or array of addresses
     `bcc` - email address or array of addresses
     `replyTo` - email address
+
+At least one of `to`, `cc` or `bcc` is required.
 
 Optional properties (overrides the values set in `createClient`):
 

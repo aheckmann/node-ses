@@ -1,9 +1,14 @@
 1.0.1 / 2015-04-15
 ==================
 
+[BUG FIXES]
+
+ * We now allow the `cc` or `bcc` fields to be used instead of `to`, mirroring the SES API. (#11, Cellule)
+
 [DOCUMENTATION]
 
  * Explicitly document format for SES endpoints and clarify that not all AWS regions support SES. (#13, rickwaugh1)
+ * We now document that we expect input to be UTF-8 encoded.
 
 [INTERNALS]
 
