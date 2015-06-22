@@ -1,7 +1,18 @@
 #node-ses
 ==========
 
-An Amazon SES api for nodejs with proper error handling.
+A simple and reliable Node.js mail for sending mail through Amazon SES.
+
+## Benefits 
+
+ * Does only one thing and does it well. Only the `SendEmail` API method is implemented.
+ * Good error handling:
+   * Only "2xx" and "3xx" resposnes from Amazon are considered successful.
+   * Amazon's XML format errors are converted to JavaScript options for easy handling.
+   * Support for the `debug` module is included if deep innspection is needed.
+ * Tested and reliable. Includes test suite. Sending email to SES since 2012.
+
+## Synopsis
 
 _This module implements the SendEmail action only. What more do you need? ;)_
 
@@ -22,7 +33,7 @@ client.sendemail({
 });
 ```
 
-## install
+## Installation
 
 `npm install node-ses`
 
@@ -77,7 +88,7 @@ See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/
 
 The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
 
-## Tests
+## Running the Tests
 
 `make test`
 
