@@ -13,7 +13,7 @@
     "amazon-ses"
   ],
   "name": "node-ses",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": {
     "url": "https://github.com/aheckmann/node-ses.git"
   },
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "request": "^2.58.0",
+    "request": "^2.60.0",
     "xml2js": "0.4.*"
   },
   "devDependencies": {

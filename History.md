@@ -1,3 +1,16 @@
+
+1.0.2 / 2015-07-23
+==================
+
+[DOCUMENTATION]
+
+ * Improved debugging documentation
+
+[INTERNALS]
+ 
+ * Bump depedencies
+ * Increase test time-out
+
 1.0.1 / 2015-04-15
 ==================
 

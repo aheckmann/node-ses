@@ -339,7 +339,7 @@ describe('Email', function(){
       assert.equal('function', typeof email.send);
     })
     it('should callback an error', function(done){
-      this.timeout(3000);
+      this.timeout(5000);
       var calledTimes = 0;
       email.send(function (err) {
         calledTimes++;

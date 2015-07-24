@@ -5,11 +5,11 @@ A simple and reliable Node.js mail for sending mail through Amazon SES.
 
 ## Benefits 
 
- * Does only one thing and does it well. Only the `SendEmail` API method is implemented.
+ * Does only one thing and does it well. Only the [SendEmail](http://docs.aws.amazon.com/ses/latest/APIReference/API_SendEmail.html) API method is implemented.
  * Good error handling:
    * Only "2xx" and "3xx" resposnes from Amazon are considered successful.
    * Amazon's XML format errors are converted to JavaScript options for easy handling.
-   * Support for the `debug` module is included if deep innspection is needed.
+   * Support for the `debug` module is included if [debugging](#debugging) is needed.
  * Tested and reliable. Includes test suite. Sending email to SES since 2012.
 
 ## Synopsis
@@ -87,6 +87,27 @@ The `data` returned in the callback is the HTTP body returned by Amazon as XML.
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
 The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
+
+<a name="debugging"></a>
+## Debugging
+
+```bash
+# Enable in the shell
+DEBUG="node-ses" ./server.js
+```
+
+```javascript
+// ... or temporarily set in your code before `node-ses` is required.
+process.env.DEBUG='node-ses';
+```
+  
+
+When debugging, it's useful to inspect the raw HTTP request and response send
+to Amazon. These can then checked against Amazon's documentation for the [SendMail](http://docs.aws.amazon.com/ses/latest/APIReference/API_SendEmail.html) API method and the [common errors](http://docs.aws.amazon.com/ses/latest/APIReference/CommonErrors.html) that Amazon might return. 
+
+To turn on debugging printed to STDERR, set `DEBUG=node-ses` in the environment before running your script. You can also set `process.env.DEBUG='node-ses';` in your code, before the `node-ses` module is required. 
+
+See the [debug module](https://www.npmjs.org/package/debug) docs for more debug output possibilities.
 
 ## Running the Tests
 
