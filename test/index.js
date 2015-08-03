@@ -22,6 +22,17 @@ function create (){
   });
 }
 
+function createRaw (){
+  return new ses.Email({
+      action : 'SendRawEmail'
+    , key: 'key'
+    , secret: 'secret'
+    , algorithm: 'algo'
+    , from: 'from'
+    , rawMessage: 'rawMessage'
+  });
+}
+
 describe('node-ses', function(){
   it('should have createClient and Email exports', function (){
     assert.equal('function', typeof ses.createClient);
@@ -103,22 +114,22 @@ describe('createClient', function(){
       assert.equal('function', typeof client.sendemail);
     });
   });
+
+  describe('sendEmail', function(){
+    it('should be a function', function(){
+      assert.equal('function', typeof client.sendEmail);
+    });
+  });
+
+  describe('sendRawEmail', function(){
+    it('should be a function', function(){
+      assert.equal('function', typeof client.sendRawEmail);
+    });
+  });
 });
 
-describe('Email', function(){
-  var email = new ses.Email({
-      key: 'key'
-    , secret: 'secret'
-    , algorithm: 'algo'
-    , from: 'from'
-    , subject: 'subject'
-    , message: 'message'
-    , altText: 'alt'
-    , to: 'to@example.com'
-    , cc: 'cc@example.com'
-    , bcc: 'bcc@example.com'
-    , replyTo: 'bcc@example.com'
-  });
+describe('sendEmail', function(){
+  var email = create();
 
   it('should have key', function(){
     assert.equal('key', email.key);
@@ -403,6 +414,210 @@ describe('Email', function(){
           , cc: 'aaron.heckmann+github@gmail.com'
           , bcc: 'aaron.heckmann+github@gmail.com'
           , replyTo: 'aaron.heckmann+github@gmail.com'
+        }, function (err, data) {
+          assert(!err);
+          assert(data);
+          done();
+        });
+      });
+    } else {
+      console.error('You are not testing with Amazons SES service');
+    }
+  });
+});
+
+describe('sendRawEmail', function(){
+  var email = createRaw();
+
+  it('should have key', function(){
+    assert.equal('key', email.key);
+  });
+
+  it('should have secret', function(){
+    assert.equal('secret', email.secret);
+  });
+
+  it('should have algorithm', function(){
+    assert.equal('algo', email.algorithm);
+  });
+
+  it('should have from', function(){
+    assert.equal('from', email.from);
+  });
+
+  it('should have rawMessage', function () {
+    assert.equal('rawMessage', email.rawMessage);
+  });
+
+  describe('#signature', function(){
+    var email = createRaw();
+    email.algorithm = 'SHA1';
+
+    var sig = crypto
+      .createHmac(email.algorithm.toLowerCase(), email.secret)
+      .update(email.date)
+      .digest('base64');
+
+    it('should be a function', function(){
+      assert.equal('function', typeof email.signature);
+    });
+
+    it('should compute the base64 hmac', function(){
+      assert.equal(sig, email.signature());
+    });
+
+    it('should return the same value if called > 1', function(){
+      assert.equal(sig, email.signature());
+      assert.equal(sig, email.signature());
+      assert.equal(email._signature, email.signature());
+    });
+  });
+
+  describe('#headers', function(){
+    var email = createRaw();
+    email.algorithm = 'SHA1';
+
+    it('should be a function', function(){
+      assert.equal('function', typeof email.headers);
+    });
+
+    it('should add headers', function(){
+      var h = email.headers({});
+      assert(h['X-Amzn-Authorization']);
+      assert(/^AWS3-HTTPS /.test(h['X-Amzn-Authorization']));
+      assert(/AWSAccessKeyId=/.test(h['X-Amzn-Authorization']));
+      assert(/Algorithm=/.test(h['X-Amzn-Authorization']));
+      assert(/Signature=/.test(h['X-Amzn-Authorization']));
+    });
+  });
+
+  describe('#validate', function(){
+    var email = createRaw();
+
+    it('should be a function', function(){
+      assert.equal('function', typeof email.validate);
+    });
+
+    it('should pass', function(){
+      assert.equal(undefined, email.validate());
+    });
+
+    it('should fail with From is required', function(){
+      delete email.from;
+      assert.equal('From is required', email.validate());
+      email.from = null;
+      assert.equal('From is required', email.validate());
+      email.from = '';
+      assert.equal('From is required', email.validate());
+      email.from = 'yup@asdf.com';
+      assert.equal(undefined, email.validate());
+    });
+
+    it('should fail with Raw message is required', function(){
+      delete email.rawMessage;
+      assert.equal('Raw message is required', email.validate());
+      email.rawMessage = null;
+      assert.equal('Raw message is required', email.validate());
+      email.rawMessage = '';
+      assert.equal('Raw message is required', email.validate());
+      email.rawMessage = 'rawMessage';
+      assert.equal(undefined, email.validate());
+    });
+  });
+
+  describe('#data', function(){
+    var email = createRaw();
+
+    it('should be a function', function(){
+      assert.equal('function', typeof email.data);
+    });
+
+    it('should contain the formatted emails data', function(){
+      var d = email.data();
+      assert(d.Action);
+      assert.equal(d.Action, 'SendRawEmail');
+      assert(d.AWSAccessKeyId);
+      assert.equal(email.key, d.AWSAccessKeyId);
+      assert(d.Signature);
+      assert.equal(email.signature, d.Signature);
+      assert(d.SignatureMethod);
+      assert('Hmac'+email.algorithm, d.SignatureMethod);
+      assert(d.SignatureVersion);
+      assert.equal(2,d.SignatureVersion);
+      assert(d.Version);
+      assert.equal('2010-12-01',d.Version);
+      assert(d.Expires);
+      assert.equal(email.date, d.Expires);
+      assert(d.Source);
+      assert.equal(email.from, d.Source);
+      assert(d['RawMessage.Data']);
+    });
+  });
+
+  describe('#send', function(){
+    var email = createRaw();
+
+    email.algorithm = 'SHA1';
+    email.amazon = ses.amazon;
+
+    it('should be a function', function(){
+      assert.equal('function', typeof email.send);
+    });
+
+    it('should callback an error', function(done){
+      this.timeout(5000);
+      var calledTimes = 0;
+      email.send(function (err) {
+        calledTimes++;
+        assert.equal(calledTimes,1,'callback was called only once');
+        assert(err);
+        assert(err.Message);
+        assert(/^The security token included in the request is invalid/.test(err.Message));
+        // Wait to see if the code is accidentally going to run the test before declaring done.
+        setTimeout(done,1000);
+      });
+    });
+
+    if (process.env.NODE_SES_KEY && process.env.NODE_SES_SECRET) {
+      it('should succeed', function(done){
+        var client = ses.createClient({
+            key: process.env.NODE_SES_KEY
+          , secret: process.env.NODE_SES_SECRET
+        });
+
+        client.sendRawEmail({
+            from: 'noreply@learnboost.com'
+          , rawMessage: [
+              'From: <noreply@learnboost.com>'
+            , 'To: <aaron.heckmann+github@gmail.com>'
+            , 'Subject: greetings'
+            , 'Content-Type: multipart/mixed;'
+            , '    boundary="_003_97DCB304C5294779BEBCFC8357FCC4D2"'
+            , 'MIME-Version: 1.0'
+            , ''
+            , '--_003_97DCB304C5294779BEBCFC8357FCC4D2'
+            , 'Content-Type: text/plain; charset="us-ascii"'
+            , 'Content-Transfer-Encoding: quoted-printable'
+            , 'Hi Aaron,'
+            , ''
+            , 'Sample code file from tests in node-ses.'
+            , ''
+            , 'Cheers,'
+            , '@brozeph'
+            , ''
+            , '--_003_97DCB304C5294779BEBCFC8357FCC4D2'
+            , 'Content-Type: text/plain; name="code.txt"'
+            , 'Content-Description: code.txt'
+            , 'Content-Disposition: attachment; filename="code.txt"; size=4;'
+            , '    creation-date="Mon, 03 Aug 2015 11:39:39 GMT";'
+            , '    modification-date="Mon, 03 Aug 2015 11:39:39 GMT"'
+            , 'Content-Transfer-Encoding: base64'
+            , ''
+            , 'ZWNobyBoZWxsbyB3b3JsZAo='
+            , ''
+            , '--_003_97DCB304C5294779BEBCFC8357FCC4D2'
+            , ''
+          ].join('\r\n')
         }, function (err, data) {
           assert(!err);
           assert(data);

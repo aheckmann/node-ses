@@ -1,7 +1,8 @@
 {
   "author": "Aaron Heckmann <aaron.heckmann+github@gmail.com>",
   "contributors": [
-    "Mark Stosberg <mark@rideamigos.com> http://mark.stosberg.com"
+    "Mark Stosberg <mark@rideamigos.com> http://mark.stosberg.com",
+    "Joshua Thomas <joshua.thomas+github@gmail.com> http://github.com/brozeph"
   ],
   "license": "MIT",
   "description": "Amazon SES (sendmail) for node",
