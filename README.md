@@ -58,7 +58,17 @@ var ses = require('node-ses')
 
 ## client.sendEmail(options, function (err, data, res))
 
-The client created has the method, `sendEmail`. This method receives an options object with the following properties:
+Composes an email message based on input data, and then immediately queues the message for sending.
+
+There are several important points to know about SendEmail:
+
+ * You can only send email from verified email addresses and domains; otherwise, you will get an "Email address not verified" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the [Amazon SES Developer Guide](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html).
+ * The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.
+ * Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.
+ * For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the [Amazon SES Developer Guide](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html).
+
+
+`sendEmail` receives an options object with the following properties:
 
     `from` - email address from which to send (required)
     `subject` - string (required). Must be encoded as UTF-8
@@ -88,6 +98,8 @@ The `data` returned in the callback is the HTTP body returned by Amazon as XML.
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
 The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
+
+*The sendEmail method also be  provided in all lowercase as `sendemail` for backwards compatibility.*
 
 ## client.sendRawEmail(options, function (err, data, res))
 
