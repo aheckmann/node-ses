@@ -1,4 +1,11 @@
 
+1.1.0 / 2015-08-10
+==================
+
+[NEW FEATURES]
+ 
+ * Start supporting sendRawEmail method. (#20, brozeph)
+
 1.0.2 / 2015-07-23
 ==================
 
@@ -8,7 +15,7 @@
 
 [INTERNALS]
  
- * Bump depedencies
+ * Bump dependencies
  * Increase test time-out
 
 1.0.1 / 2015-04-15

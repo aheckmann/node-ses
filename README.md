@@ -5,7 +5,7 @@ A simple and reliable Node.js mail for sending mail through Amazon SES.
 
 ## Benefits
 
- * Does only one thing and does it well. Only the [SendEmail](http://docs.aws.amazon.com/ses/latest/APIReference/API_SendEmail.html) API method is implemented.
+ * Does only one thing and does it well. Only the [SendEmail](http://docs.aws.amazon.com/ses/latest/APIReference/API_SendEmail.html) and [SendRawEmail](http://docs.aws.amazon.com/ses/latest/APIReference/API_SendRawEmail.html) API methods are implemented.
  * Good error handling:
    * Only "2xx" and "3xx" resposnes from Amazon are considered successful.
    * Amazon's XML format errors are converted to JavaScript options for easy handling.
@@ -14,12 +14,14 @@ A simple and reliable Node.js mail for sending mail through Amazon SES.
 
 ## Synopsis
 
-_This module implements the SendEmail action only. What more do you need? ;)_
+Start by creating a client object, and then call either the `sendEmail` or `sendRawEmail` method
+depending on your needs.
 
-```js
+```javascript
 var ses = require('node-ses')
   , client = ses.createClient({ key: 'key', secret: 'secret' });
 
+// Give SES the details and let it construct the message for you. 
 client.sendEmail({
    to: 'aaron.heckmann+github@gmail.com'
  , from: 'somewhereOverTheR@inbow.com'
@@ -28,6 +30,14 @@ client.sendEmail({
  , subject: 'greetings'
  , message: 'your <b>message</b> goes here'
  , altText: 'plain text'
+}, function (err, data, res) {
+ // ...
+});
+
+// ... or build a message from scratch yourself and send it.
+client.sendRawEmail({
+ , from: 'somewhereOverTheR@inbow.com'
+ , rawMessage: rawMessage
 }, function (err, data, res) {
  // ...
 });
@@ -103,12 +113,22 @@ The `res` returned by the callback represents the HTTP response to calling the S
 
 ## client.sendRawEmail(options, function (err, data, res))
 
-The client supports the ability to send a raw message via the method, `sendRawEmail`. This method receives an options object with the following properties:
+Sends an email message, with header and content specified by the client. The SendRawEmail action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent.
+
+There are several important points to know about SendRawEmail:
+
+ * You can only send email from verified email addresses and domains; otherwise, you will get an "Email address not verified" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the [Amazon SES Developer Guide](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html).
+ * The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.
+ * Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.
+ * The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.
+For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the [Amazon SES Developer Guide](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html).
+
+
+`sendRawEmail` receives an options object with the following properties:
 
     `from` - email address from which to send (required)
     `rawMessage` - the raw text of the message which includes a header and a body (required)
 
-### Notes
 Within the raw text of the message, the following must be observed:
 
 * The `rawMessage` value must contain a header and a body, separated by a blank line.
@@ -128,8 +148,8 @@ var CRLF = '\r\n'
   , ses = require('node-ses')
   , client = ses.createClient({ key: 'key', secret: 'secret' })
   , rawMessage = [
-    'From: "Someone" <somewhereOverTheR@inbow.com>',
-    'To: "brozeph" <joshua.thomas+github@gmail.com>',
+    'From: "Someone" <someone@example.com>',
+    'To: "Someone Else" <other@example.com>',
     'Subject: greetings',
     'Content-Type: multipart/mixed;',
     '    boundary="_003_97DCB304C5294779BEBCFC8357FCC4D2"',
@@ -159,7 +179,7 @@ var CRLF = '\r\n'
   ].join(CRLF);
 
 client.sendRawEmail({
- , from: 'somewhereOverTheR@inbow.com'
+ , from: 'someone@example.com'
  , rawMessage: rawMessage
 }, function (err, data, res) {
  // ...
