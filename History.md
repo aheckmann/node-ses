@@ -6,6 +6,10 @@
  
  * Start supporting sendRawEmail method. (#20, brozeph)
 
+[INTERNALS]
+
+ * Fixed typo in source code (#24, DelvarWorld)
+
 1.0.2 / 2015-07-23
 ==================
 
