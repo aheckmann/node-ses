@@ -1,6 +1,10 @@
 
-1.1.0 / 2015-08-10
+1.1.0 / 2015-08-25
 ==================
+
+[BUG FIXES]
+
+ * Documented default value of Amazon end point was wrong (#21, #25, imatveev, DelvarWorld)
 
 [NEW FEATURES]
  
