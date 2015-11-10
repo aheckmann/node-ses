@@ -7,7 +7,7 @@ A simple and reliable Node.js mail for sending mail through Amazon SES.
 
  * Does only one thing and does it well. Only the [SendEmail](http://docs.aws.amazon.com/ses/latest/APIReference/API_SendEmail.html) and [SendRawEmail](http://docs.aws.amazon.com/ses/latest/APIReference/API_SendRawEmail.html) API methods are implemented.
  * Good error handling:
-   * Only "2xx" and "3xx" resposnes from Amazon are considered successful.
+   * Only "2xx" and "3xx" responses from Amazon are considered successful.
    * Amazon's XML format errors are converted to JavaScript options for easy handling.
    * Support for the `debug` module is included if [debugging](#debugging) is needed.
  * Tested and reliable. Includes test suite. Sending email to SES since 2012.
