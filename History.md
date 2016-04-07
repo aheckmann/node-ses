@@ -1,4 +1,17 @@
 
+1.2.0 / 2016-04-07
+
+[DOCUMENTATION]
+
+ * More detail on the structure of errors that might be returned was added.
+   See new Error Handling heading in the README (markstos)
+
+[INTERNALS]
+
+ * Internal errrors are now returned in the same format as AWS errors for consistency.
+   This changes the structure of the error returned for the edge cases where the HTTP request to AWS failed
+   or we failed to parse the XML of the response. (markstos)
+
 1.1.0 / 2015-08-25
 ==================
 

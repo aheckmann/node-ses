@@ -21,7 +21,7 @@ depending on your needs.
 var ses = require('node-ses')
   , client = ses.createClient({ key: 'key', secret: 'secret' });
 
-// Give SES the details and let it construct the message for you. 
+// Give SES the details and let it construct the message for you.
 client.sendEmail({
    to: 'aaron.heckmann+github@gmail.com'
  , from: 'somewhereOverTheR@inbow.com'
@@ -102,6 +102,8 @@ The `sendEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
 400, we will callback with an `err` object that is a direct translation of the XML error Amazon provides.
 
+See [Error Handling](#error-handling) section below for details on the structure of returned errors.
+
 Check for errors returned since a 400 status is not uncommon.
 
 The `data` returned in the callback is the HTTP body returned by Amazon as XML.
@@ -140,6 +142,8 @@ Within the raw text of the message, the following must be observed:
 The `sendRawEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
 400, we will callback with an `err` object that is a direct translation of the XML error Amazon provides.
+
+See [error handling] section below for details on the structure of returned errors.
 
 ### Example
 
@@ -192,6 +196,31 @@ The `data` returned in the callback is the HTTP body returned by Amazon as XML.
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
 The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
+
+<a name="error-handling"></a>
+## Error Handling
+
+The errors returned when sending failed are JavaScript objects that correspond to the Error element as seen in [Structure of an Error Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) from the official documentation. The properties in error object we return include:
+
+ * A `Type` element that identifies whether the error was a Receiver, Sender, or NodeSesInternal error
+ * A `Code` element that identifies the type of error that occurred
+ * A `Message` element that describes the error condition in a human-readable form
+ * A `Detail` element that might give additional details about the error or might be empty
+
+An error of Type `NodeSesInternal` is returned in two cases:
+
+ * If the HTTP request to AWS fails so that we don't get a normal resposne from AWS. The `Code` will be `RequestError` and the `Message` will contain the HTTP request error.
+ * If we fail to parse the XML returned by AWS. The `Code` will be set to `ParseError` and the `Message` will contain the error returned from our XML parser.
+
+Example error response:
+
+```json
+{
+  "Type": "Sender",
+  "Code": "ValidationError",
+  "Message": "Value null at 'message.subject' failed to satisfy constraint: Member must not be null"
+}
+```
 
 <a name="debugging"></a>
 ## Debugging
