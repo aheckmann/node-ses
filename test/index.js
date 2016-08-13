@@ -385,7 +385,7 @@ describe('sendEmail', function(){
     });
 
     it('should callback an error', function(done){
-      this.timeout(5000);
+      this.timeout(10000);
       var calledTimes = 0;
       email.send(function (err) {
         calledTimes++;
@@ -404,6 +404,7 @@ describe('sendEmail', function(){
             key: process.env.NODE_SES_KEY
           , secret: process.env.NODE_SES_SECRET
         });
+        this.timeout(10000);
 
         client.sendemail({
             from: 'noreply@learnboost.com'
@@ -565,7 +566,7 @@ describe('sendRawEmail', function(){
     });
 
     it('should callback an error', function(done){
-      this.timeout(5000);
+      this.timeout(10000);
       var calledTimes = 0;
       email.send(function (err) {
         calledTimes++;
