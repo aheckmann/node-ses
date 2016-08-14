@@ -55,7 +55,6 @@ You'll probably only be using this method. It takes an options object with the f
 
     `key` - (required) your AWS SES key
     `secret` - (required) your AWS SES secret
-    `algorithm` - [optional] the AWS algorithm you are using. defaults to SHA1.
     `amazon` - [optional] the amazon end-point uri. defaults to `https://email.us-east-1.amazonaws.com`
 
 Not all AWS regions support SES. Check [SES region support](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/regions.html) to be sure the region you are in is supported.
@@ -95,8 +94,7 @@ Optional properties (overrides the values set in `createClient`):
 
     `key` - AWS key
     `secret` - AWS secret
-    `algorithm` - AWS algorithm to use
-    `amazon` - AWS end point
+    `amazon` - AWS end point. Defaults to `https://email.us-east-1.amazonaws.com`
 
 The `sendEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
@@ -245,7 +243,7 @@ See the [debug module](https://www.npmjs.org/package/debug) docs for more debug 
 
 ## Running the Tests
 
-`make test`
+ `npm test`
 
 ## See Also
 
