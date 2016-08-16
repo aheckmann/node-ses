@@ -243,7 +243,18 @@ See the [debug module](https://www.npmjs.org/package/debug) docs for more debug 
 
 ## Running the Tests
 
+Unit tests
+
  `npm test`
+
+To run the full tests, including actually using the AWS SES REST APIs with your credentials, set the following environment variables:
+
+    # Your SES Key and secret
+    NODE_SES_KEY
+    NODE_SES_SECRET
+
+    # An email that is both an verified sende that can also receive test emails. Possibly your own email address
+    NODE_SES_EMAIL
 
 ## See Also
 

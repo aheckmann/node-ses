@@ -326,7 +326,7 @@ describe('sendEmail', function(){
       });
     });
 
-    if (process.env.NODE_SES_KEY && process.env.NODE_SES_SECRET) {
+    if (process.env.NODE_SES_KEY && process.env.NODE_SES_SECRET && process.env.NODE_SES_EMAIL) {
       it('should succeed', function(done){
         var client = ses.createClient({
             key: process.env.NODE_SES_KEY
@@ -335,14 +335,14 @@ describe('sendEmail', function(){
         this.timeout(20000);
 
         client.sendemail({
-            from: 'noreply@rideamigos.com'
+            from: process.env.NODE_SES_EMAIL
           , subject: 'testing node-ses'
           , message: 'this is a test'
           , altText: 'this is an alt txt'
-          , to: 'mark@rideamigos.com'
-          , cc: 'mark@rideamigos.com'
-          , bcc: 'mark@rideamigos.com'
-          , replyTo: 'mark@rideamigos.com'
+          , to: process.env.NODE_SES_EMAIL
+          , cc: process.env.NODE_SES_EMAIL
+          , bcc: process.env.NODE_SES_EMAIL
+          , replyTo: process.env.NODE_SES_EMAIL
         }, function (err, data) {
           assert(!err);
           assert(data);
@@ -467,10 +467,10 @@ describe('sendRawEmail', function(){
         });
 
         client.sendRawEmail({
-            from: 'noreply@rideamigos.com'
-          , rawMessage: [
-              'From: <noreply@rideamigos.com>'
-            , 'To: <mark@rideamigos.com>'
+            from: process.env.NODE_SES_EMAIL
+            , rawMessage: [
+              'From: <'+process.env.NODE_SES_EMAIL+'>'
+            , 'To: <'+process.env.NODE_SES_EMAIL+'>'
             , 'Subject: greetings'
             , 'Content-Type: multipart/mixed;'
             , '    boundary="_003_97DCB304C5294779BEBCFC8357FCC4D2"'
