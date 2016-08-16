@@ -355,6 +355,40 @@ describe('sendEmail', function(){
   });
 });
 
+describe('_processResponse', function () {
+  var email = create();
+
+  it('should errback with error Type:NodeSesInternal error if there is an error with the HTTP response', function(done) {
+      // For now, the 'message' is being returned as object, but #34 is expected to make a string
+      email._processResponse({ message: 'BOOM'}, undefined, undefined, function (error) {
+          assert.deepEqual(error, {
+            Type: 'NodeSesInternal',
+            Code: 'RequestError',
+            Message: {
+              message : 'BOOM'
+            }
+          });
+          done();
+      })
+  });
+
+	// Here we return Error objects in message, but #34 will change this to strings.
+  it('Should errback with Type:NodeSesInternal/Code:ParseError if error response cannot be parsed as XML', function (done) {
+      var res = { statusCode : 500 };
+      var data = 'BOOM';
+      email._processResponse(undefined,  res , data, function (error) {
+          assert.deepEqual(error, {
+            Type: 'NodeSesInternal',
+            Code: 'ParseError',
+            Message: new Error("Non-whitespace before first tag.\nLine: 0\nColumn: 1\nChar: B")
+          });
+          done();
+      })
+
+
+  });
+});
+
 describe('sendRawEmail', function(){
   var email = createRaw();
 
