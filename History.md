@@ -1,11 +1,10 @@
 
-2.0.0 / 2016-08-12
+2.0.0 / 2016-08-16
 ==================
 
 There's a major version bump because the internals changed signficantly as part
 of switching to version 4 authentication signatures with AWS. The upgrade
 is backwards compatible with 1.2 for normal use.
-
 
 [NEW FEATURES]
 
@@ -13,13 +12,16 @@ is backwards compatible with 1.2 for normal use.
 
 [INTERNALS]
 
- * Switched from using "version 2" AWS authentication signatures to "version 4" for future proofing. (markstos)
- * Processing the response from AWS has been moved to it's own function, paving the way for future testing, and
-   overriding this part of the module. For now the function remains undocumented. (markstos)
+ * Switched from using "version 2" AWS authentication signatures to "version 4" for future-proofing. (markstos)
+ * Processing the response from AWS has been moved to it's own function. Automated test coverage for it has been added
+   and there's now the potential to override how response handling works. For now the function remains undocumented. (markstos)
 
 [BREAKING CHANGES]
 
- * 'algorithm' property is no longer exported and the option to change it is removed. If you are using an alternate algorithm to sign version 4 Authentication signatures, a pull request is welcome to restore this feature.
+ * 'algorithm' property is no longer exported and the option to change it is
+   removed. If you are using an alternate algorithm to sign version 4
+   Authentication signatures, a pull request is welcome to restore this
+   feature. (markstos)
 
 
 1.2.0 / 2016-04-07

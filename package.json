@@ -5,16 +5,17 @@
     "Joshua Thomas <joshua.thomas+github@gmail.com> http://github.com/brozeph"
   ],
   "license": "MIT",
-  "description": "Amazon SES (sendmail) for node",
+  "description": "Simple Email Sender for Amazon SES with good docs and error handling",
   "keywords": [
     "amazon",
+    "aws",
     "ses",
     "email",
     "sendmail",
     "amazon-ses"
   ],
   "name": "node-ses",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "repository": {
     "url": "https://github.com/aheckmann/node-ses.git"
   },
