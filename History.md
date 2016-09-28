@@ -1,4 +1,14 @@
 
+2.0.1 / 2016-09-28
+===================
+
+No code changes.
+
+[INTERNALS]
+
+ * Link to new node-ses-any-promise package, a fork with promise-based API.
+
+
 2.0.0 / 2016-08-16
 ==================
 

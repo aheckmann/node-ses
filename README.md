@@ -258,8 +258,9 @@ To run the full tests, including actually using the AWS SES REST APIs with your 
 
 ## See Also
 
+ * [node-ses-any-promise](https://www.npmjs.com/package/node-ses-any-promise) is a fork with a promise-based API.
  * [nodemailer](https://www.npmjs.com/package/nodemailer) has more features, including attachment support. There are many "transport" plugins available for it, including one for SES.
 
-## Licence
+## License
 
 [MIT](https://github.com/aheckmann/node-ses/blob/master/LICENSE)
