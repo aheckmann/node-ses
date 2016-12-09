@@ -1,3 +1,16 @@
+2.0.3 / 2016-12-09
+===================
+
+[BUG FIXES]
+
+ * Really release fix from 2.0.2 (@lyuzashi)
+
+2.0.2 / 2016-12-05
+===================
+
+[BUG FIXES]
+
+ * Fix syntax issue which could break builds in some cases (@otech47)
 
 2.0.1 / 2016-09-28
 ===================
