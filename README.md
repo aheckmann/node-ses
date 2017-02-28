@@ -205,10 +205,11 @@ The errors returned when sending failed are JavaScript objects that correspond t
  * A `Message` element that describes the error condition in a human-readable form
  * A `Detail` element that might give additional details about the error or might be empty
 
-An error of Type `NodeSesInternal` is returned in two cases:
+An error of Type `NodeSesInternal` is returned in three cases:
 
  * If the HTTP request to AWS fails so that we don't get a normal resposne from AWS. The `Code` will be `RequestError` and the `Message` will contain the HTTP request error.
  * If we fail to parse the XML returned by AWS. The `Code` will be set to `ParseError` and the `Message` will contain the error returned from our XML parser.
+ * If we parse the XML returned by AWS but for some reason it doesn't conform to expected structure. The `Code` wll be set to `XmlError` and the `Message` will be set to the parsed XML.
 
 Example error response:
 

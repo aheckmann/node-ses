@@ -1,3 +1,12 @@
+
+2.0.4 / 2017-02-28
+==================
+
+[INTERNALS]
+
+ * Add error checking for another case that could cause exceptions to be thrown when AWS has problems. (#42)
+
+
 2.0.3 / 2016-12-09
 ===================
 
