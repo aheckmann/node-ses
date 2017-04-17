@@ -1,4 +1,4 @@
-#node-ses
+# node-ses
 ==========
 
 A simple and reliable Node.js mail for sending mail through Amazon SES.
