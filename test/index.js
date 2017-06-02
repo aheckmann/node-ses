@@ -6,7 +6,7 @@ var assert = require('assert')
   , ses = require('../')
   , crypto = require('crypto');
 
-function create (){
+function create () {
   return new ses.Email({
       key: 'key'
     , secret: 'secret'
@@ -78,6 +78,26 @@ describe('createClient', function(){
     var client = ses.createClient();
     assert.equal(client.key, undefined);
   });
+
+  it('should require a key', function(){
+    try {
+      ses.createClient();
+    } catch (err) {
+      if (!/key is required/.test(err)) {
+        throw err;
+      }
+    }
+  });
+
+  it('should require a secret', function(){
+    try {
+      ses.createClient({ key: 1 });
+    } catch (err) {
+      if (!/secret is required/.test(err)) {
+        throw err;
+      }
+    }
+  })
 
   describe('sendemail', function(){
     it('should be a function', function(){
@@ -312,7 +332,7 @@ describe('sendEmail', function(){
     });
 
     if (process.env.NODE_SES_KEY && process.env.NODE_SES_SECRET && process.env.NODE_SES_EMAIL) {
-      it('should succeed', function(done){
+      it('should succeed and return the response from aws as object', function(done){
         var client = ses.createClient({
             key: process.env.NODE_SES_KEY
           , secret: process.env.NODE_SES_SECRET
@@ -331,6 +351,9 @@ describe('sendEmail', function(){
         }, function (err, data) {
           assert(!err);
           assert(data);
+          assert(typeof(data) === 'object');
+          assert(data.SendEmailResponse);
+          assert(data.SendEmailResponse.ResponseMetadata);
           done();
         });
       });
@@ -343,8 +366,7 @@ describe('sendEmail', function(){
 describe('_processResponse', function () {
   var email = create();
 
-  it('should errback with error Type:NodeSesInternal error if there is an error with the HTTP response', function(done) {
-      // For now, the 'message' is being returned as object, but #34 is expected to make a string
+  it('should errback with error Type:NodeSesInternal error if there is an error with the HTTP request', function(done) {
       email._processResponse({ message: 'BOOM'}, undefined, undefined, function (error) {
           assert.deepEqual(error, {
             Type: 'NodeSesInternal',
@@ -357,20 +379,17 @@ describe('_processResponse', function () {
       })
   });
 
-	// Here we return Error objects in message, but #34 will change this to strings.
-  it('Should errback with Type:NodeSesInternal/Code:ParseError if error response cannot be parsed as XML', function (done) {
+  it('Should errback if aws error json response does not have valid schema', function (done) {
       var res = { statusCode : 500 };
       var data = 'BOOM';
       email._processResponse(undefined,  res , data, function (error) {
           assert.deepEqual(error, {
             Type: 'NodeSesInternal',
-            Code: 'ParseError',
-            Message: new Error("Non-whitespace before first tag.\nLine: 0\nColumn: 1\nChar: B")
+            Code: 'JsonError',
+            Message: new Error("Malformed error response from aws: BOOM")
           });
           done();
       })
-
-
   });
 });
 

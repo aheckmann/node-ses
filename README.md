@@ -8,7 +8,7 @@ A simple and reliable Node.js mail for sending mail through Amazon SES.
  * Does only one thing and does it well. Only the [SendEmail](http://docs.aws.amazon.com/ses/latest/APIReference/API_SendEmail.html) and [SendRawEmail](http://docs.aws.amazon.com/ses/latest/APIReference/API_SendRawEmail.html) API methods are implemented.
  * Good error handling:
    * Only "2xx" and "3xx" responses from Amazon are considered successful.
-   * Amazon's XML format errors are converted to JavaScript options for easy handling.
+   * Returned error objects are the _Error_ elements of [Amazon's error responses](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) with _Type_, _Code_, _Message_ etc.
    * Support for the `debug` module is included if [debugging](#debugging) is needed.
  * Tested and reliable. Includes test suite. Sending email to SES since 2012.
 
@@ -19,7 +19,7 @@ depending on your needs.
 
 ```javascript
 var ses = require('node-ses')
-  , client = ses.createClient({ key: 'key', secret: 'secret' });
+  , client = ses.createClient({key: 'key', secret: 'secret'});
 
 // Give SES the details and let it construct the message for you.
 client.sendEmail({
@@ -100,13 +100,14 @@ Optional properties (overrides the values set in `createClient`):
 
 The `sendEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
-400, we will callback with an `err` object that is a direct translation of the XML error Amazon provides.
+400, we will callback with an `err` object that is direct presentation of the _Error_ element of aws error response.
 
 See [Error Handling](#error-handling) section below for details on the structure of returned errors.
 
 Check for errors returned since a 400 status is not uncommon.
 
-The `data` returned in the callback is the HTTP body returned by Amazon as XML.
+The `data` returned in the callback is an object containing the parsed Amazon json response.
+
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
 The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
@@ -141,9 +142,9 @@ Within the raw text of the message, the following must be observed:
 
 The `sendRawEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
-400, we will callback with an `err` object that is a direct translation of the XML error Amazon provides.
+400, we will callback with an `err` object that is direct presentation of the _Error_ element of aws error response.
 
-See [error handling] section below for details on the structure of returned errors.
+See [Error Handling](#error-handling) section below for details on the structure of returned errors.
 
 ### Example
 
@@ -192,7 +193,8 @@ client.sendRawEmail({
 
 Check for errors returned since a 400 status is not uncommon.
 
-The `data` returned in the callback is the HTTP body returned by Amazon as XML.
+The `data` returned in the callback is an object containing the parsed Amazon json response.
+
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
 The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
@@ -209,9 +211,8 @@ The errors returned when sending failed are JavaScript objects that correspond t
 
 An error of Type `NodeSesInternal` is returned in three cases:
 
- * If the HTTP request to AWS fails so that we don't get a normal resposne from AWS. The `Code` will be `RequestError` and the `Message` will contain the HTTP request error.
- * If we fail to parse the XML returned by AWS. The `Code` will be set to `ParseError` and the `Message` will contain the error returned from our XML parser.
- * If we parse the XML returned by AWS but for some reason it doesn't conform to expected structure. The `Code` wll be set to `XmlError` and the `Message` will be set to the parsed XML.
+ * If the HTTP request to AWS fails so that we don't get a normal response from AWS. The `Code` will be `RequestError` and the `Message` will contain the HTTP request error.
+ * If aws error response has invalid schema (Error element is missing), then the `Code` will be set to `JsonError` and the `Message` will contain explanation and the original response.
 
 Example error response:
 
