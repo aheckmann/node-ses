@@ -19,7 +19,11 @@ depending on your needs.
 
 ```javascript
 var ses = require('node-ses')
-  , client = ses.createClient({ key: 'key', secret: 'secret' });
+  , client = ses.createClient({
+      key: 'key',
+      secret: 'secret',
+      resultType: 'json'
+    });
 
 // Give SES the details and let it construct the message for you.
 client.sendEmail({
@@ -55,7 +59,8 @@ You'll probably only be using this method. It takes an options object with the f
 
     `key` - (required) your AWS SES key
     `secret` - (required) your AWS SES secret
-    `amazon` - [optional] the amazon end-point uri. defaults to `https://email.us-east-1.amazonaws.com`
+    `amazon` - [optional] the amazon end-point uri. Defaults to `https://email.us-east-1.amazonaws.com`
+    `resultType`- [optional] `json` or `xml` (defaults to 'xml' for backwards compatibility)
 
 Not all AWS regions support SES. Check [SES region support](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/regions.html) to be sure the region you are in is supported.
 
@@ -95,16 +100,18 @@ Optional properties (overrides the values set in `createClient`):
     `key` - AWS key
     `secret` - AWS secret
     `amazon` - AWS end point. Defaults to `https://email.us-east-1.amazonaws.com`
+    `resultType` - `json` or `xml` (defaults to 'xml' for backwards compatibility)
 
 The `sendEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
-400, we will callback with an `err` object that is a direct translation of the XML error Amazon provides.
+400, we will callback with an `err` object that is a direct translation of the XML error Amazon provides. Note that possible aws error response will be translated to an object even if _resultType_ is set to `xml` (for backwards compatibility).
 
 See [Error Handling](#error-handling) section below for details on the structure of returned errors.
 
 Check for errors returned since a 400 status is not uncommon.
 
-The `data` returned in the callback is the HTTP body returned by Amazon as XML.
+The `data` returned in the callback is the HTTP body returned by Amazon. The HTTP request asks Amazon to return the data in format specified by the _resultType_ option that can be given to client constructor or sendEmail method. If _resultType_ is `xml` (default) then it will be XML. If _resultType_ is `json`, it will be object.
+
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
 The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
@@ -139,7 +146,7 @@ Within the raw text of the message, the following must be observed:
 
 The `sendRawEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
-400, we will callback with an `err` object that is a direct translation of the XML error Amazon provides.
+400, we will callback with an `err` object that is a direct translation of the XML error Amazon provides. Note that possible aws error response will be translated to an object even if _resultType_ is set to `xml` (for backwards compatibility).
 
 See [error handling] section below for details on the structure of returned errors.
 
@@ -190,7 +197,8 @@ client.sendRawEmail({
 
 Check for errors returned since a 400 status is not uncommon.
 
-The `data` returned in the callback is the HTTP body returned by Amazon as XML.
+The `data` returned in the callback is the HTTP body returned by Amazon. The HTTP request asks Amazon to return the data in format specified by the _resultType_ option that can be given to client constructor or sendEmail method. If _resultType_ is `xml` (default) then it will be XML. If _resultType_ is `json`, it will be object.
+
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
 The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
@@ -207,9 +215,10 @@ The errors returned when sending failed are JavaScript objects that correspond t
 
 An error of Type `NodeSesInternal` is returned in three cases:
 
- * If the HTTP request to AWS fails so that we don't get a normal resposne from AWS. The `Code` will be `RequestError` and the `Message` will contain the HTTP request error.
- * If we fail to parse the XML returned by AWS. The `Code` will be set to `ParseError` and the `Message` will contain the error returned from our XML parser.
- * If we parse the XML returned by AWS but for some reason it doesn't conform to expected structure. The `Code` wll be set to `XmlError` and the `Message` will be set to the parsed XML.
+ * If the HTTP request to AWS fails so that we don't get a normal response from AWS. The `Code` will be `RequestError` and the `Message` will contain the HTTP request error.
+ * If _resultType_ is `xml` and we fail to parse the XML returned by AWS. The `Code` will be set to `ParseError` and the `Message` will contain the error returned from our XML parser.
+ * If _resultType_ is `xml` and we parse the XML returned by AWS but for some reason it doesn't conform to expected structure. The `Code` wll be set to `XmlError` and the `Message` will be set to the parsed XML.
+ * If _resultType_ is `json` but for some reason it doesn't conform to expected structure. The `Code` will be set to `JsonError` and the `Message` will contain explanation and the original response.
 
 Example error response:
 
