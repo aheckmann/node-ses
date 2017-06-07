@@ -6,7 +6,7 @@ var assert = require('assert')
   , ses = require('../')
   , crypto = require('crypto');
 
-function create (resultType) {
+function create () {
   return new ses.Email({
       key: 'key'
     , secret: 'secret'
@@ -18,7 +18,6 @@ function create (resultType) {
     , cc: 'cc@example.com'
     , bcc: ['bcc@example.com', 'yoyo@example.com']
     , replyTo: 'bcc@example.com'
-    , resultType: resultType || 'xml'
   });
 }
 
@@ -61,17 +60,9 @@ describe('createClient', function(){
     assert.ok(client.amazon);
   });
 
-  it('should have a resultType property', function(){
-    assert.ok(client.resultType);
-  });
-
   it('amazon should default correctly', function(){
     var amazon = 'https://email.us-east-1.amazonaws.com';
     assert.equal(client.amazon, amazon);
-  });
-
-  it('resultType should default correctly', function(){
-    assert.equal(client.resultType, 'xml');
   });
 
   it('amazon should be overiddable', function(){
@@ -81,15 +72,6 @@ describe('createClient', function(){
       , secret: 2
     });
     assert.equal(client.amazon, 'http://www.google.com');
-  });
-
-  it('resultType should be overiddable', function(){
-    var client = ses.createClient({
-        resultType: 'json'
-      , key: 1
-      , secret: 2
-    });
-    assert.equal(client.resultType, 'json');
   });
 
   it('should require a key', function(){
@@ -140,10 +122,6 @@ describe('sendEmail', function(){
 
   it('should have secret', function(){
     assert.equal('secret', email.secret);
-  });
-
-  it('should have resultType', function(){
-    assert.equal('xml', email.resultType);
   });
 
   it('should have from', function(){
@@ -295,19 +273,6 @@ describe('sendEmail', function(){
       email.subject = 'spammer';
       assert.equal(undefined, email.validate());
     });
-
-    it('should fail with invalid resultType', function(){
-      delete email.resultType;
-      assert.equal("Invalid resultType 'undefined'. Valid values are: json,xml", email.validate());
-      email.resultType = null;
-      assert.equal("Invalid resultType 'null'. Valid values are: json,xml", email.validate());
-      email.resultType = '';
-      assert.equal("Invalid resultType ''. Valid values are: json,xml", email.validate());
-      email.resultType = 'csv';
-      assert.equal("Invalid resultType 'csv'. Valid values are: json,xml", email.validate());
-      email.resultType = 'json';
-      assert.equal(undefined, email.validate());
-    });
   });
 
   describe('#data', function(){
@@ -362,36 +327,10 @@ describe('sendEmail', function(){
     });
 
     if (process.env.NODE_SES_KEY && process.env.NODE_SES_SECRET && process.env.NODE_SES_EMAIL) {
-      it('should succeed and return xml string by default', function(done){
+      it('should succeed and return the response from aws as object', function(done){
         var client = ses.createClient({
             key: process.env.NODE_SES_KEY
           , secret: process.env.NODE_SES_SECRET
-        });
-        this.timeout(20000);
-
-        client.sendemail({
-            from: process.env.NODE_SES_EMAIL
-          , subject: 'testing node-ses'
-          , message: 'this is a test'
-          , altText: 'this is an alt txt'
-          , to: process.env.NODE_SES_EMAIL
-          , cc: process.env.NODE_SES_EMAIL
-          , bcc: process.env.NODE_SES_EMAIL
-          , replyTo: process.env.NODE_SES_EMAIL
-        }, function (err, data) {
-          assert(!err);
-          assert(data);
-          assert(typeof(data) === 'string');
-          assert(data.indexOf('<SendEmailResponse') === 0);
-          done();
-        });
-      });
-
-      it('should succeed and return json if requested', function(done){
-        var client = ses.createClient({
-            key: process.env.NODE_SES_KEY
-          , secret: process.env.NODE_SES_SECRET
-          , resultType: 'json'
         });
         this.timeout(20000);
 
@@ -420,12 +359,10 @@ describe('sendEmail', function(){
 });
 
 describe('_processResponse', function () {
-  var emailWithXmlResponse = create('xml');
-  var emailWithJsonResponse = create('json');
+  var email = create();
 
-  it('should errback with error Type:NodeSesInternal error if there is an error with the xml HTTP response', function(done) {
-      // For now, the 'message' is being returned as object, but #34 is expected to make a string
-      emailWithXmlResponse._processResponse({ message: 'BOOM'}, undefined, undefined, function (error) {
+  it('should errback with error Type:NodeSesInternal error if there is an error with the HTTP request', function(done) {
+      email._processResponse({ message: 'BOOM'}, undefined, undefined, function (error) {
           assert.deepEqual(error, {
             Type: 'NodeSesInternal',
             Code: 'RequestError',
@@ -437,38 +374,10 @@ describe('_processResponse', function () {
       })
   });
 
-  it('should errback with error Type:NodeSesInternal error if there is an error with the json HTTP response', function(done) {
-      emailWithJsonResponse._processResponse({ message: 'BOOM'}, undefined, undefined, function (error) {
-          assert.deepEqual(error, {
-            Type: 'NodeSesInternal',
-            Code: 'RequestError',
-            Message: {
-              message : 'BOOM'
-            }
-          });
-          done();
-      })
-  });
-
-	// Here we return Error objects in message, but #34 will change this to strings.
-  it('Should errback with Type:NodeSesInternal/Code:ParseError if error response cannot be parsed as XML', function (done) {
+  it('Should errback if aws error json response does not have valid schema', function (done) {
       var res = { statusCode : 500 };
       var data = 'BOOM';
-      emailWithXmlResponse._processResponse(undefined,  res , data, function (error) {
-          assert.deepEqual(error, {
-            Type: 'NodeSesInternal',
-            Code: 'ParseError',
-            Message: new Error()
-          });
-          assert.equal(error.Message.toString(), new Error("Non-whitespace before first tag.\nLine: 0\nColumn: 1\nChar: B"));
-          done();
-      })
-  });
-
-  it('Should errback if error json response has not valid schema', function (done) {
-      var res = { statusCode : 500 };
-      var data = 'BOOM';
-      emailWithJsonResponse._processResponse(undefined,  res , data, function (error) {
+      email._processResponse(undefined,  res , data, function (error) {
           assert.deepEqual(error, {
             Type: 'NodeSesInternal',
             Code: 'JsonError',
