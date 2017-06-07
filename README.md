@@ -98,7 +98,7 @@ Optional properties (overrides the values set in `createClient`):
 
 The `sendEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
-400, we will callback with an `err` object that is directly the _Error_ element of aws error response.
+400, we will callback with an `err` object that is direct presentation of the _Error_ element of aws error response.
 
 See [Error Handling](#error-handling) section below for details on the structure of returned errors.
 
@@ -140,7 +140,7 @@ Within the raw text of the message, the following must be observed:
 
 The `sendRawEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
-400, we will callback with an `err` object that is directly the _Error_ element of aws error response.
+400, we will callback with an `err` object that is direct presentation of the _Error_ element of aws error response.
 
 See [Error Handling](#error-handling) section below for details on the structure of returned errors.
 
