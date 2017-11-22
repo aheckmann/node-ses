@@ -74,24 +74,9 @@ describe('createClient', function(){
     assert.equal(client.amazon, 'http://www.google.com');
   });
 
-  it('should require a key', function(){
-    try {
-      ses.createClient();
-    } catch (err) {
-      if (!/key is required/.test(err)) {
-        throw err;
-      }
-    }
-  });
-
-  it('should require a secret', function(){
-    try {
-      ses.createClient({ key: 1 });
-    } catch (err) {
-      if (!/secret is required/.test(err)) {
-        throw err;
-      }
-    }
+  it('should not require options', function(){
+    var client = ses.createClient();
+    assert.equal(client.key, undefined);
   });
 
   describe('sendemail', function(){
