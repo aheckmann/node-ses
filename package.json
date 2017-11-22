@@ -15,7 +15,7 @@
     "amazon-ses"
   ],
   "name": "node-ses",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "repository": {
     "url": "https://github.com/aheckmann/node-ses.git"
   },

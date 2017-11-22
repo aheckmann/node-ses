@@ -1,4 +1,11 @@
 
+2.0.5 / 2017-03-28
+==================
+
+[BUG FIXES]
+
+ * sendEmail 'key' option now properly overrides 'key' option given to create() (#43)
+
 2.0.4 / 2017-02-28
 ==================
 
