@@ -53,8 +53,8 @@ The module has one primary export:
 
 You'll probably only be using this method. It takes an options object with the following properties:
 
-    `key` - (required) your AWS SES key
-    `secret` - (required) your AWS SES secret
+    `key` -  your AWS SES key. Defaults to checking `process.env.AWS_ACCESS_KEY_ID` and `process.env.AWS_ACCESS_KEY`
+    `secret` - your AWS SES secret. Defaults to `process.env.AWS_SECRET_ACCESS_KEY` and `process.env.AWS_SECRET_KEY`
     `amazon` - [optional] the amazon end-point uri. defaults to `https://email.us-east-1.amazonaws.com`
 
 Not all AWS regions support SES. Check [SES region support](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/regions.html) to be sure the region you are in is supported.
