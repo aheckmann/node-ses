@@ -1,4 +1,11 @@
 
+2.1.0 / 2017-11-22
+==================
+
+[NEW FEATURES]
+
+ * Allow setting key and secret from the environment. Helps support AWS Lambda. (#49)
+
 2.0.5 / 2017-03-28
 ==================
 
