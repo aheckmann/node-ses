@@ -87,6 +87,8 @@ There are several important points to know about SendEmail:
     `cc` - email address or array of addresses
     `bcc` - email address or array of addresses
     `replyTo` - email address
+    `configurationSet` - SES configuration set name
+    `messageTags` - SES message tags: array of name/value objects, e.g. { name: xid, value: 1 }
 
 At least one of `to`, `cc` or `bcc` is required.
 
