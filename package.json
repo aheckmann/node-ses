@@ -15,7 +15,7 @@
     "amazon-ses"
   ],
   "name": "node-ses",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "repository": {
     "url": "https://github.com/aheckmann/node-ses.git"
   },
@@ -23,10 +23,10 @@
     "test": "make test"
   },
   "dependencies": {
-    "aws4": "^1.4.1",
-    "debug": "^2.2.0",
-    "request": "^2.70.0",
-    "xml2js": "0.4.*"
+    "aws4": "^1.8.0",
+    "debug": "^2.6.9",
+    "request": "^2.88.0",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "jshint": "^2.8.0",
@@ -34,6 +34,6 @@
   },
   "optionalDependencies": {},
   "engines": {
-    "node": ">= 0.6.x"
+    "node": ">= 6.x"
   }
 }

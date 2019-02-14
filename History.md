@@ -1,4 +1,17 @@
 
+ 2.2.0 / 2019-02-14 ❤️
+ ======================
+
+[NEW FEATURES]
+
+ * Add support for setting the configuration set during sending (#53)
+
+[INTERNALS]
+
+ * Bumped dependencies
+ * Dropped support for Node.js < 6. (Although it may still work)
+
+
 2.1.0 / 2017-11-22
 ==================
 
