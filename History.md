@@ -1,4 +1,15 @@
 
+2.2.2 / 2020-04-16
+==================
+
+## [BUG FIXES]
+
+ * Fix signature signing for eu-central-1 region (#60)
+
+## [INTERNALS]
+
+ * Bump lodash dependency
+
 2.2.1 / 2019-05-22
 ==================
 
