@@ -25,9 +25,9 @@
     "test": "make test"
   },
   "dependencies": {
-    "aws4": "^1.8.0",
+    "aws4": "1.9.1",
     "debug": "^2.6.9",
-    "request": "^2.88.0"
+    "request": "2.88.2"
   },
   "devDependencies": {
     "@types/request": "^2.48.1",
