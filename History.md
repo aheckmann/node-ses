@@ -1,4 +1,19 @@
 
+3.0.0 / 2020-04-16
+==================
+
+## [BREAKING CHANGES]
+
+Internally we switched from requesting XML to requesting JSON from AWS.
+
+While the JavaScript API we provide remains the same, there are places where we
+used to return errors with a `Code` property set to `XmlError`. In these cases
+the error will be set to `JsonError` instead. If your use depended on this
+behavior it will need to be changed to explect the new error type instead.
+Switching from XML to JSON to allows us to drop the XML dependencies we had,
+reducing exposure to potential XML vulnerablities. Since JSON is faster to
+parse than XML, performance may improve as well.
+
 2.2.2 / 2020-04-16
 ==================
 
