@@ -1,10 +1,9 @@
 'use strict';
 
-// use mocha for test
-
-var assert = require('assert')
-  , ses = require('../')
-  , crypto = require('crypto');
+const assert = require('assert')
+const ses = require('../')
+const crypto = require('crypto')
+const { Response } = require('node-fetch')
 
 function create () {
   return new ses.Email({
@@ -323,6 +322,7 @@ describe('sendEmail', function(){
       email.send(function (err) {
         calledTimes++;
         assert.equal(calledTimes,1,'callback was called only once');
+        console.log("Got error!", err)
         assert(err);
         assert(err.Message);
         assert(/^The security token included in the request is invalid/.test(err.Message));
@@ -363,33 +363,35 @@ describe('sendEmail', function(){
   });
 });
 
+describe('_processFetchError', function () {
+  var email = create();
+
+  it('should errback with error Type:NodeSesInternal error if there is an error with the HTTP request', done => {
+    email._processFetchError({ message: 'BOOM'}).asCallback(function (error) {
+      assert.deepEqual(error, {
+        Type: 'NodeSesInternal',
+        Code: 'RequestError',
+        Message: {
+          message : 'BOOM'
+        }
+      });
+      done();
+    })
+  })
+})
+
 describe('_processResponse', function () {
   var email = create();
 
-  it('should errback with error Type:NodeSesInternal error if there is an error with the HTTP request', function(done) {
-      email._processResponse({ message: 'BOOM'}, undefined, undefined, function (error) {
-          assert.deepEqual(error, {
-            Type: 'NodeSesInternal',
-            Code: 'RequestError',
-            Message: {
-              message : 'BOOM'
-            }
-          });
-          done();
-      })
-  });
-
-  it('Should errback if aws error json response does not have valid schema', function (done) {
-      var res = { statusCode : 500 };
-      var data = 'BOOM';
-      email._processResponse(undefined,  res , data, function (error) {
-          assert.deepEqual(error, {
-            Type: 'NodeSesInternal',
-            Code: 'JsonError',
-            Message: new Error("Malformed error response from aws: BOOM")
-          });
-          done();
-      })
+  it('Should errback if AWS error JSON response does not have valid schema', function (done) {
+    var res = new Response({ status : 500 });
+    var data = 'BOOM';
+    email._processResponse(res).asCallback(function (error) {
+      assert.equal(error.Type, 'NodeSesInternal')
+      assert.equal(error.Code, 'JsonError')
+      assert.equal(error.Message, new Error("Malformed error response from aws: BOOM"))
+      done();
+    })
   });
 });
 

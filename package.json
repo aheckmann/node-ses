@@ -26,11 +26,11 @@
   },
   "dependencies": {
     "aws4": "^1.8.0",
+    "bluebird": "^3.7.2",
     "debug": "^2.6.9",
-    "request": "^2.88.0"
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "@types/request": "^2.48.1",
     "jshint": "^2.8.0",
     "mocha": "*"
   },

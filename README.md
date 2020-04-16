@@ -110,7 +110,7 @@ The `data` returned in the callback is an object containing the parsed Amazon js
 
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
-The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
+The `res` returned by the callback represents the HTTP response to calling the SES REST API as the node-fetch module returns it.
 
 *The sendEmail method also be  provided in all lowercase as `sendemail` for backwards compatibility.*
 
@@ -197,7 +197,7 @@ The `data` returned in the callback is an object containing the parsed Amazon js
 
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
-The `res` returned by the callback represents the HTTP response to calling the SES REST API as the [request](https://www.npmjs.org/package/request) module returns it.
+The `res` returned by the callback represents the HTTP response to calling the SES REST API as the node-fetch module returns it.
 
 <a name="error-handling"></a>
 ## Error Handling
