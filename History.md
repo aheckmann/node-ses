@@ -8,7 +8,7 @@
 
 ## [INTERNALS]
 
- * Bump lodash dependency
+ * Bump lodash, aws4, request deps
 
 2.2.1 / 2019-05-22
 ==================
