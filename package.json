@@ -22,7 +22,8 @@
     "url": "https://github.com/aheckmann/node-ses.git"
   },
   "scripts": {
-    "test": "make test"
+    "test": "mocha --reporter list",
+    "jshint": "jshint lib/*.js test/*.js"
   },
   "dependencies": {
     "aws4": "1.9.1",
