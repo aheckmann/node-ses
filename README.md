@@ -98,15 +98,15 @@ Optional properties (overrides the values set in `createClient`):
     `secret` - AWS secret
     `amazon` - AWS end point. Defaults to `https://email.us-east-1.amazonaws.com`
 
-The `sendEmail` method transports your message to the AWS SES service. If Amazon
+The `sendEmail` method transports your message to the AWS SES service. If AWS
 returns an HTTP status code that's less than `200` or greater than or equal to
-400, we will callback with an `err` object that is direct presentation of the _Error_ element of aws error response.
+400, we will callback with an `err` object that is a direct tranalation of the _Error_ element of the AWS error response.
 
 See [Error Handling](#error-handling) section below for details on the structure of returned errors.
 
 Check for errors returned since a 400 status is not uncommon.
 
-The `data` returned in the callback is an object containing the parsed Amazon json response.
+The `data` returned in the callback is an object containing the parsed AWS response.
 
 See the [SES API Response](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/query-interface-responses.html) docs for details.
 
@@ -137,12 +137,12 @@ Within the raw text of the message, the following must be observed:
 * The `rawMessage` value must contain a header and a body, separated by a blank line.
 * All required header fields must be present.
 * Each part of a multipart MIME message must be formatted properly.
-* MIME content types must be among those supported by Amazon SES. For more information, see the [Amazon SES Developer Guide](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html).
+* MIME content types must be among those supported by AWS SES. For more information, see the [SES Developer Guide](http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html).
 * The `rawMessage` content must be base64-encoded, if MIME requires it.
 
 The `sendRawEmail` method transports your message to the AWS SES service. If Amazon
 returns an HTTP status code that's less than `200` or greater than or equal to
-400, we will callback with an `err` object that is direct presentation of the _Error_ element of aws error response.
+400, we will callback with an `err` object that is a direct translation of the _Error_ element of aws error response.
 
 See [Error Handling](#error-handling) section below for details on the structure of returned errors.
 
@@ -212,7 +212,7 @@ The errors returned when sending failed are JavaScript objects that correspond t
 An error of Type `NodeSesInternal` is returned in three cases:
 
  * If the HTTP request to AWS fails so that we don't get a normal response from AWS. The `Code` will be `RequestError` and the `Message` will contain the HTTP request error.
- * If aws error response has invalid schema (Error element is missing), then the `Code` will be set to `JsonError` and the `Message` will contain explanation and the original response.
+ * If aws error response has invalid schema (Error element is missing), then the `Code` will be set to `XmlError` and the `Message` will contain explanation and the original response.
 
 Example error response:
 
