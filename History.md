@@ -1,4 +1,10 @@
 
+3.0.1 / 2020-05-04
+===================
+
+Revert broken attempt to switch to switch to JSOn parsing in 3.0.0
+
+
 3.0.0 / 2020-04-16
 ==================
 

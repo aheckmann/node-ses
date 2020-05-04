@@ -15,7 +15,7 @@
     "amazon-ses"
   ],
   "name": "node-ses",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "index.js",
   "types": "node-ses.d.ts",
   "repository": {
