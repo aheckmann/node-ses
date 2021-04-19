@@ -97,7 +97,7 @@ Optional properties (overrides the values set in `createClient`):
     `key` - AWS key
     `secret` - AWS secret
     `amazon` - AWS end point. Defaults to `https://email.us-east-1.amazonaws.com`
-
+If you want to add a different end point than `us-east-1`, you can find a list [here](https://docs.aws.amazon.com/general/latest/gr/ses.html). (Note: Don't forget to add `https://`)
 The `sendEmail` method transports your message to the AWS SES service. If AWS
 returns an HTTP status code that's less than `200` or greater than or equal to
 400, we will callback with an `err` object that is a direct tranalation of the _Error_ element of the AWS error response.
