@@ -30,6 +30,7 @@ client.sendEmail({
  , subject: 'greetings'
  , message: 'your <b>message</b> goes here'
  , altText: 'plain text'
+ , timeout: 300
 }, function (err, data, res) {
  // ...
 });
@@ -79,16 +80,17 @@ There are several important points to know about SendEmail:
 
 `sendEmail` receives an options object with the following properties:
 
-    `from` - email address from which to send (required)
-    `subject` - string (required). Must be encoded as UTF-8
+    `from` - email address from which to send (required).
+    `subject` - string (required). Must be encoded as UTF-8.
     `message` - can be html (required). Must be encoded as UTF-8.
     `altText` - plain text version of message. Must be encoded as UTF-8.
-    `to` - email address or array of addresses
-    `cc` - email address or array of addresses
-    `bcc` - email address or array of addresses
-    `replyTo` - email address
-    `configurationSet` - SES configuration set name
+    `to` - email address or array of addresses.
+    `cc` - email address or array of addresses.
+    `bcc` - email address or array of addresses.
+    `replyTo` - email address.
+    `configurationSet` - SES configuration set name.
     `messageTags` - SES message tags: array of name/value objects, e.g. { name: xid, value: 1 }
+    `timeout` - boolean, set the timeout for the HTTP request.
 
 At least one of `to`, `cc` or `bcc` is required.
 
