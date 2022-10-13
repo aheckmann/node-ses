@@ -54,13 +54,10 @@ declare module "node-ses" {
     sendemail(options: sendEmailOptions, callback: Callback): void;
     sendRawEmail(options: sendRawEmailOptions, callback: Callback): void;
   }
-  export function createClient({
-    key,
-    secret,
-    amazon
-  }: {
+  export interface ClientConfig {
     key: string;
     secret: string;
     amazon?: string;
-  }): Client;
+  }
+  export function createClient(options?: ClientConfig): Client;
 }
