@@ -20,6 +20,7 @@ declare module "node-ses" {
     key?: string;
     secret?: string;
     amazon?: string;
+    timeout?: boolean;
   }
   export interface sendRawEmailOptions {
     from: string;
