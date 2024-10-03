@@ -1,3 +1,10 @@
+# DEPRECATED
+
+As of October 2024, this project is no longer supported. Please enjoy one of these other great alternatives: 
+
+- [AWS official client](https://www.npmjs.com/package/@aws-sdk/client-ses)
+- [nodemailer](https://nodemailer.com/)
+
 # node-ses
 ==========
 
